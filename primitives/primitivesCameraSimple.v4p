@@ -1,0 +1,227 @@
+<!DOCTYPE PATCH  SYSTEM "http://vvvv.org/versions/vvvv45beta31.2.dtd" >
+   <PATCH nodename="C:\Users\bibi\Desktop\primitives\primitivesCameraSimple.v4p" systemname="primitivesCameraSimple" filename="D:\DX11 Visuals\Patches\Eyeball\primitivesCameraSimple.v4p">
+   <BOUNDS type="Window" left="-24180" top="-1425" width="7230" height="6750">
+   </BOUNDS>
+   <NODE systemname="Renderer (DX11)" filename="%VVVV%\packs\DX11\nodes\plugins\VVVV.DX11.Nodes.dll" nodename="Renderer (DX11)" componentmode="InAWindow" id="1">
+   <BOUNDS type="Node" left="540" top="3675" width="100" height="100">
+   </BOUNDS>
+   <BOUNDS type="Box" left="540" top="3675" width="3075" height="2775">
+   </BOUNDS>
+   <BOUNDS type="Window" left="-24990" top="5760" width="6030" height="5490">
+   </BOUNDS>
+   <PIN pinname="Layers" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Actual BackBuffer SizeXY" visible="1">
+   </PIN>
+   <PIN pinname="Background Color" slicecount="1" values="|0.33937,0.33937,0.33937,1.00000|">
+   </PIN>
+   <PIN pinname="Mouse State" visible="1">
+   </PIN>
+   <PIN pinname="Projection" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="View" visible="1">
+   </PIN>
+   <PIN pinname="Depth Buffer Mode" slicecount="1" values="Standard">
+   </PIN>
+   <PIN pinname="Depth Buffer Format" slicecount="1" values="D32_Float">
+   </PIN>
+   <PIN pinname="VSync" slicecount="1" values="1">
+   </PIN>
+   <PIN pinname="Show Cursor" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="AA Samples per Pixel" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="Quad (DX11.Geometry)" filename="%VVVV%\packs\DX11\nodes\plugins\VVVV.DX11.Nodes.dll" nodename="Quad (DX11.Geometry)" componentmode="Hidden" id="2">
+   <BOUNDS type="Node" left="1155" top="300" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Geometry Out" visible="1">
+   </PIN>
+   <PIN pinname="SizeXY" slicecount="2" values="2,2">
+   </PIN>
+   </NODE>
+   <INFO author="rt" description="" tags="">
+   </INFO>
+   <NODE systemname="MouseState (System Split)" filename="%VVVV%\lib\nodes\plugins\VVVV.Nodes.dll" nodename="MouseState (System Split)" componentmode="Hidden" id="6">
+   <BOUNDS type="Node" left="525" top="4725" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Mouse" visible="1">
+   </PIN>
+   <PIN pinname="Y" visible="1">
+   </PIN>
+   <PIN pinname="X" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="1" srcpinname="Mouse State" dstnodeid="6" dstpinname="Mouse">
+   </LINK>
+   <NODE systemname="Vector (2d Join)" nodename="Vector (2d Join)" componentmode="Hidden" id="7">
+   <BOUNDS type="Node" left="525" top="5235" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Y" visible="1">
+   </PIN>
+   <PIN pinname="X" visible="1">
+   </PIN>
+   <PIN pinname="XY" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="6" srcpinname="Y" dstnodeid="7" dstpinname="Y">
+   </LINK>
+   <LINK srcnodeid="6" srcpinname="X" dstnodeid="7" dstpinname="X">
+   </LINK>
+   <NODE systemname="FrameDelay (Animation)" nodename="FrameDelay (Animation)" componentmode="Hidden" id="8">
+   <BOUNDS type="Node" left="3165" top="4275" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input 1" visible="1">
+   </PIN>
+   <PIN pinname="Output 1" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="1" srcpinname="Actual BackBuffer SizeXY" dstnodeid="8" dstpinname="Input 1">
+   </LINK>
+   <NODE systemname="Integrate (Differential)" nodename="Integrate (Differential)" componentmode="Hidden" id="9">
+   <BOUNDS type="Node" left="3675" top="435" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Position Out" visible="1">
+   </PIN>
+   <PIN pinname="Position In" slicecount="1" values="1.32">
+   </PIN>
+   </NODE>
+   <NODE systemname="Rotate (Transform)" nodename="Rotate (Transform)" componentmode="Hidden" id="10">
+   <BOUNDS type="Node" left="1755" top="1560" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Transform Out" visible="1">
+   </PIN>
+   <PIN pinname="Z" slicecount="1" values="0.5">
+   </PIN>
+   </NODE>
+   <NODE systemname="Camera (Transform Softimage)" filename="%VVVV%\lib\nodes\modules\Transform\Camera (Transform Softimage).v4p" nodename="Camera (Transform Softimage)" componentmode="Hidden" id="11">
+   <BOUNDS type="Node" left="1695" top="2985" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="View" visible="1">
+   </PIN>
+   <PIN pinname="Projection" visible="1">
+   </PIN>
+   <PIN pinname="Inital Distance" slicecount="1" values="0.87">
+   </PIN>
+   <PIN pinname="Initial FOV" slicecount="1" values="0.16">
+   </PIN>
+   <PIN pinname="Initial Yaw" slicecount="1" values="-0.65">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="11" srcpinname="View" dstnodeid="1" dstpinname="View">
+   </LINK>
+   <LINK srcnodeid="11" srcpinname="Projection" dstnodeid="1" dstpinname="Projection">
+   </LINK>
+   <NODE systemname="AspectRatio (DX11.Layer)" filename="%VVVV%\packs\DX11\nodes\plugins\VVVV.DX11.Nodes.dll" nodename="AspectRatio (DX11.Layer)" componentmode="Hidden" id="12">
+   <BOUNDS type="Node" left="675" top="2580" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Layer In" visible="1" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Layer Out" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="12" srcpinname="Layer Out" dstnodeid="1" dstpinname="Layers">
+   </LINK>
+   <NODE nodename="Vector (2D Join)" id="13" systemname="Vector (2d Join)">
+   <PIN pinname="X" slicecount="1" visible="1" values="0.25">
+   </PIN>
+   <PIN pinname="Y" slicecount="1" values="0.24">
+   </PIN>
+   <BOUNDS type="Node" left="5250" top="600" width="0" height="0">
+   </BOUNDS>
+   </NODE>
+   <NODE systemname="LFO (Animation)" nodename="LFO (Animation)" componentmode="Hidden" id="14">
+   <BOUNDS type="Node" left="5235" top="15" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Output" visible="1">
+   </PIN>
+   <PIN pinname="Period" slicecount="1" values="1.81">
+   </PIN>
+   </NODE>
+   <NODE systemname="Multiply (Value)" nodename="Multiply (Value)" componentmode="Hidden" id="15">
+   <BOUNDS type="Node" left="6120" top="300" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input 2" slicecount="1" values="0.26">
+   </PIN>
+   <PIN pinname="Input 1" visible="1">
+   </PIN>
+   <PIN pinname="Output" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="14" srcpinname="Output" dstnodeid="15" dstpinname="Input 1">
+   </LINK>
+   <LINK srcnodeid="15" srcpinname="Output" dstnodeid="13" dstpinname="X">
+   </LINK>
+   <NODE systemname="Timing (Debug)" nodename="Timing (Debug)" componentmode="Hidden" id="16">
+   <BOUNDS type="Node" left="4680" top="3480" width="100" height="100">
+   </BOUNDS>
+   </NODE>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="17" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Box" left="4680" top="4395" width="795" height="240">
+   </BOUNDS>
+   <BOUNDS type="Node" left="4680" top="4395" width="0" height="0">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="16" srcpinname="frames per second" dstnodeid="17" dstpinname="Y Input Value">
+   </LINK>
+   <NODE systemname="Primitives_Camera (DX11.Effect)" filename="dx11\Primitives_Camera.fx" nodename="Primitives_Camera (DX11.Effect)" componentmode="Hidden" id="0">
+   <BOUNDS type="Node" left="660" top="1065" width="5550" height="270">
+   </BOUNDS>
+   <PIN pinname="Geometry" visible="1">
+   </PIN>
+   <PIN pinname="Layer" visible="1">
+   </PIN>
+   <PIN pinname="time" visible="1">
+   </PIN>
+   <PIN pinname="_rFrequency">
+   </PIN>
+   <PIN pinname="_rAmplitude">
+   </PIN>
+   <PIN pinname="_rGain">
+   </PIN>
+   <PIN pinname="_rOffset" visible="1">
+   </PIN>
+   <PIN pinname="_rLacunarity">
+   </PIN>
+   <PIN pinname="unResolutionXY" visible="1">
+   </PIN>
+   <PIN pinname="iResolutionXY" visible="1">
+   </PIN>
+   <PIN pinname="timeXYZW">
+   </PIN>
+   <PIN pinname="viewXYZW">
+   </PIN>
+   <PIN pinname="freqXYZW" visible="1">
+   </PIN>
+   <PIN pinname="mposXYZW">
+   </PIN>
+   <PIN pinname="Technique" slicecount="1" values="Render">
+   </PIN>
+   <PIN pinname="boXYZ" slicecount="3" values="0.8,0.8,0.8">
+   </PIN>
+   <PIN pinname="lightXYZ" slicecount="3" values="0.11,0.11,0.11">
+   </PIN>
+   <PIN pinname="radius" slicecount="1" values="0.23">
+   </PIN>
+   <PIN pinname="iMouseXY" visible="1">
+   </PIN>
+   <PIN pinname="iGlobalTime" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="2" srcpinname="Geometry Out" dstnodeid="0" dstpinname="Geometry">
+   </LINK>
+   <LINK srcnodeid="7" srcpinname="XY" dstnodeid="0" dstpinname="iMouseXY">
+   </LINK>
+   <LINK srcnodeid="8" srcpinname="Output 1" dstnodeid="0" dstpinname="iResolutionXY">
+   </LINK>
+   <LINK srcnodeid="9" srcpinname="Position Out" dstnodeid="0" dstpinname="iGlobalTime">
+   </LINK>
+   <LINK srcnodeid="0" srcpinname="Layer" dstnodeid="12" dstpinname="Layer In">
+   </LINK>
+   </PATCH>
