@@ -1,0 +1,118 @@
+
+Texture2D texture2d <string uiname="Texture";>;
+
+Texture2D projectionTexture <string uiname="projectionTexture";>;
+
+
+
+SamplerState g_samLinear 
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
+ 
+    float4x4 tW : WORLD;
+	float4x4 tVP : VIEWPROJECTION;
+    float4x4 tV : VIEW;
+	float Alpha <float uimin=0.0; float uimax=1.0;> = 1; 
+
+    matrix viewMatrix2;
+    matrix projectionMatrix2;
+
+
+struct VertexInputType //VS_IN
+{
+    float4 position : POSITION;
+    float2 tex : TEXCOORD0;
+	float3 normal : NORMAL;
+
+
+};
+
+struct PixelInputType // vs2ps
+{
+    float4 position : SV_POSITION;
+
+	float3 normal : NORMAL;
+    float4 viewPosition : TEXCOORD1;
+
+};
+
+
+
+PixelInputType ProjectiveTexturing_VS(VertexInputType input)
+{
+    PixelInputType output;
+    
+	float4 cameraPosition;
+	
+ // Change the position vector to be 4 units for proper matrix calculations.
+    input.position.w = 1.0f;
+
+	// Calculate the position of the vertex against the world, view, and projection matrices.
+    output.position = mul(input.position,tW);
+    output.position = mul(output.position,tVP);
+
+	// Calculate the normal vector against the world matrix only.
+    output.normal = mul(input.normal,(float3x3)tW);
+	
+    // Normalize the normal vector.
+    output.normal = normalize(output.normal);
+
+    // Store the position of the vertice as viewed by the projection view point in a separate variable.
+    output.viewPosition = mul(input.position, tW);
+    output.viewPosition = mul(output.viewPosition, viewMatrix2);
+    output.viewPosition = mul(output.viewPosition, projectionMatrix2);
+
+    return output;
+}
+
+float4 projection (float4 position)
+{
+	float4 color = float4(0.0,0.0,0.0,1.0);
+	float2 projectTexCoord;
+	
+	projectTexCoord.x =  position.x / position.w / 2.0f + 0.5f;
+    projectTexCoord.y = -position.y / position.w / 2.0f + 0.5f;
+	  
+	if((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
+    {
+        // Sample the color value from the projection texture using the sampler at the projected texture coordinate location.
+        color = projectionTexture.Sample(g_samLinear, projectTexCoord);        
+    }else{color = 0;}
+	
+	return color;
+}
+
+// Pixel Shader
+////////////////////////////////////////////////////////////////////////////////
+float4 ProjectiveTexturing_PS(PixelInputType input) : SV_TARGET
+{
+
+    float4 color = 0;
+	float2 projectTexCoord;
+	    // Calculate the projected texture coordinates.
+    projectTexCoord.x =  input.viewPosition.x / input.viewPosition.w / 2.0f + 0.5f;
+    projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
+
+    // Determine if the projected coordinates are in the 0 to 1 range.  If it is then this pixel is inside the projected view port.
+    if((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
+    {
+        // Sample the color value from the projection texture using the sampler at the projected texture coordinate location.
+        color = projectionTexture.Sample(g_samLinear, projectTexCoord); 
+       
+    }
+   
+    return color;
+}
+
+technique10 ProjectiveTexturing
+{
+	pass P0o
+	{
+		SetVertexShader( CompileShader( vs_4_0, ProjectiveTexturing_VS() ) );
+		SetPixelShader( CompileShader( ps_4_0, ProjectiveTexturing_PS() ) );
+	}
+}
